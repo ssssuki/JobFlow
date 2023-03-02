@@ -12,19 +12,23 @@ const initialState = {
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
-  const {isLoading, showAlert} = useAppContext()
+  const { isLoading, showAlert, displayAlert } = useAppContext();
 
   const toogleMember = () => {
-    setValues({ ...values, isMember: !values.isMember})
-  }
+    setValues({ ...values, isMember: !values.isMember });
+  };
 
   const handleChange = (e) => {
-    console.log(e.target);
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    const { name, email, password, isMember } = values;
+    if (!email || !password || (!isMember && !name)) {
+      displayAlert();
+      return;
+    }
   };
 
   return (
@@ -32,16 +36,16 @@ const Register = () => {
       <form className="form" onSubmit={onSubmit}>
         <Logo />
         <h3>{values.isMember ? "Login" : "Register"}</h3>
-        {showAlert && <Alert/>}
+        {showAlert && <Alert />}
         {!values.isMember && (
           <FormRow
-          type="text"
-          name="name"
-          value={values.name} 
-          handleChange={handleChange}
-        />
+            type="text"
+            name="name"
+            value={values.name}
+            handleChange={handleChange}
+          />
         )}
-        
+
         <FormRow
           type="email"
           name="email"
@@ -54,12 +58,13 @@ const Register = () => {
           value={values.password}
           handleChange={handleChange}
         />
-        <button type="submit" className="btn btn-block">submit</button>
+        <button type="submit" className="btn btn-block">
+          submit
+        </button>
         <p>
-          {values.isMember?"Not a member yet?":"Already a member?"}
-          <button type="button" onClick={toogleMember}
-          className="member-btn">
-          {values.isMember?"Register":"Login"}
+          {values.isMember ? "Not a member yet?" : "Already a member?"}
+          <button type="button" onClick={toogleMember} className="member-btn">
+            {values.isMember ? "Register" : "Login"}
           </button>
         </p>
       </form>

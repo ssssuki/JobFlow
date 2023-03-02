@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Dashboard, Landing, Error, Register} from "./pages";
 
 function App() {
+  console.log("test")
   return (
     <BrowserRouter>
 
