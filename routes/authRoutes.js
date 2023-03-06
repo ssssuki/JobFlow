@@ -6,8 +6,8 @@ import { register, login, updateUser } from "../controllers/autoController.js"
 
 router.route('/register').post(register)
 router.route('/login').post(login)
-router.route('/updateUser').post(updateUser)
+router.route('/updateUser').patch(updateUser)
 
 
 
-module.exports = router
+export default router
