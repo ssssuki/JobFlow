@@ -1,14 +1,15 @@
 import User from '../models/User.js'
-
+import { StatusCodes } from 'http-status-codes'
 
 const register = async (req, res, next) => {
-  try {
-    const user = await User.create(req.body)
-    res.status(201).json({ user })
-  } catch (error) {
-    next(error)
-    }
-} 
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    throw new Error('please provide all values');
+  }
+  const user = await User.createcreate({ name, email, password })
+  res.status(StatusCodes.OK).json({ user })
+}
 
 const login = async (req, res) => {
   res.send('login user')
@@ -17,7 +18,7 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   res.send('update user')
 }
-  
+
 export {
   register,
   login,
