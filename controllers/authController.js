@@ -15,7 +15,7 @@ const register = async (req, res, next) => {
     throw new BadRequestError('Email already in use');
   }
 
-  const user = await User.createcreate({ name, email, password })
+  const user = await User.create({ name, email, password })
   res.status(StatusCodes.OK).json({ user })
 }
 
@@ -25,6 +25,7 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
   res.send('update user')
+  User.findOneAndDelete
 }
 
 export {
