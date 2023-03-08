@@ -12,7 +12,7 @@ const initialState = {
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
-  const { isLoading, showAlert, displayAlert } = useAppContext();
+  const { isLoading, showAlert, displayAlert, registerUser } = useAppContext();
 
   const toogleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -29,46 +29,54 @@ const Register = () => {
       displayAlert();
       return;
     }
-  };
+    const currentUser = { name, email, password }
+    if (isMember) {
+      console.log('already a member');
+    }
+    else {
+      registerUser(currentUser)
+    };
+  }
 
-  return (
-    <Wrapper className="full-page">
-      <form className="form" onSubmit={onSubmit}>
-        <Logo />
-        <h3>{values.isMember ? "Login" : "Register"}</h3>
-        {showAlert && <Alert />}
-        {!values.isMember && (
+    return (
+      <Wrapper className="full-page">
+        <form className="form" onSubmit={onSubmit}>
+          <Logo />
+          <h3>{values.isMember ? "Login" : "Register"}</h3>
+          {showAlert && <Alert />}
+          {!values.isMember && (
+            <FormRow
+              type="text"
+              name="name"
+              value={values.name}
+              handleChange={handleChange}
+            />
+          )}
+
           <FormRow
-            type="text"
-            name="name"
-            value={values.name}
+            type="email"
+            name="email"
+            value={values.email}
             handleChange={handleChange}
           />
-        )}
-
-        <FormRow
-          type="email"
-          name="email"
-          value={values.email}
-          handleChange={handleChange}
-        />
-        <FormRow
-          type="password"
-          name="password"
-          value={values.password}
-          handleChange={handleChange}
-        />
-        <button type="submit" className="btn btn-block">
-          submit
-        </button>
-        <p>
-          {values.isMember ? "Not a member yet?" : "Already a member?"}
-          <button type="button" onClick={toogleMember} className="member-btn">
-            {values.isMember ? "Register" : "Login"}
+          <FormRow
+            type="password"
+            name="password"
+            value={values.password}
+            handleChange={handleChange}
+          />
+          <button type="submit" className="btn btn-block"
+          disabled={isLoading}>
+            submit
           </button>
-        </p>
-      </form>
-    </Wrapper>
-  );
-};
-export default Register;
+          <p>
+            {values.isMember ? "Not a member yet?" : "Already a member?"}
+            <button type="button" onClick={toogleMember} className="member-btn">
+              {values.isMember ? "Register" : "Login"}
+            </button>
+          </p>
+        </form>
+      </Wrapper>
+    );
+  };
+  export default Register;
