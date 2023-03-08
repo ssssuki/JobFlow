@@ -14,7 +14,7 @@ const initialState = {
 const Register = () => {
   const navigate = useNavigate()
   const [values, setValues] = useState(initialState);
-  const { user, isLoading, showAlert, displayAlert, registerUser } = useAppContext();
+  const { user, isLoading, showAlert, displayAlert, registerUser, loginUser } = useAppContext();
 
   const toogleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -33,7 +33,7 @@ const Register = () => {
     }
     const currentUser = { name, email, password }
     if (isMember) {
-      console.log('already a member');
+      loginUser(currentUser)
     }
     else {
       registerUser(currentUser)
@@ -49,45 +49,45 @@ const Register = () => {
   }, [user, navigate]);
 
 
-    return (
-      <Wrapper className="full-page">
-        <form className="form" onSubmit={onSubmit}>
-          <Logo />
-          <h3>{values.isMember ? "Login" : "Register"}</h3>
-          {showAlert && <Alert />}
-          {!values.isMember && (
-            <FormRow
-              type="text"
-              name="name"
-              value={values.name}
-              handleChange={handleChange}
-            />
-          )}
+  return (
+    <Wrapper className="full-page">
+      <form className="form" onSubmit={onSubmit}>
+        <Logo />
+        <h3>{values.isMember ? "Login" : "Register"}</h3>
+        {showAlert && <Alert />}
+        {!values.isMember && (
+          <FormRow
+            type="text"
+            name="name"
+            value={values.name}
+            handleChange={handleChange}
+          />
+        )}
 
-          <FormRow
-            type="email"
-            name="email"
-            value={values.email}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type="password"
-            name="password"
-            value={values.password}
-            handleChange={handleChange}
-          />
-          <button type="submit" className="btn btn-block"
+        <FormRow
+          type="email"
+          name="email"
+          value={values.email}
+          handleChange={handleChange}
+        />
+        <FormRow
+          type="password"
+          name="password"
+          value={values.password}
+          handleChange={handleChange}
+        />
+        <button type="submit" className="btn btn-block"
           disabled={isLoading}>
-            submit
+          submit
+        </button>
+        <p>
+          {values.isMember ? "Not a member yet?" : "Already a member?"}
+          <button type="button" onClick={toogleMember} className="member-btn">
+            {values.isMember ? "Register" : "Login"}
           </button>
-          <p>
-            {values.isMember ? "Not a member yet?" : "Already a member?"}
-            <button type="button" onClick={toogleMember} className="member-btn">
-              {values.isMember ? "Register" : "Login"}
-            </button>
-          </p>
-        </form>
-      </Wrapper>
-    );
-  };
-  export default Register;
+        </p>
+      </form>
+    </Wrapper>
+  );
+};
+export default Register;

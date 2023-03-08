@@ -1,6 +1,8 @@
 import React, { useReducer, useContext, useEffect } from "react";
 import reducer from "./reducers";
-import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, REGISTER_USER_ERROR, REGISTER_USER_SUCCESS } from "./action";
+import { DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN, 
+  REGISTER_USER_ERROR, REGISTER_USER_SUCCESS, 
+  LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS } from "./action";
 import axios from 'axios'
 
 
@@ -68,8 +70,13 @@ const AppProvider = ({ children }) => {
     }
     clearAlert()
   }
+
+const loginUser= async (currentUser) => {
+  console.log(currentUser)
+}
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, registerUser }}>
+    <AppContext.Provider value={{ ...state, displayAlert, registerUser,loginUser }}>
       {children}
     </AppContext.Provider>
   );
