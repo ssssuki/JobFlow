@@ -4,6 +4,8 @@ import 'express-async-errors';
 import morgan from 'morgan';
 import errorHandlerMiddleware from './middleware/error-handler.js';
 import notFoundMiddleware from './middleware/not-found.js';
+import authenticateUser from './middleware/auth.js';
+
 import dotenv from "dotenv";
 import connectDB from './db/connect.js';
 import authRouter from './routes/authRoutes.js';
@@ -24,7 +26,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/jobs', jobsRouter)
+app.use('/api/v1/jobs', authenticateUser, jobsRouter)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
