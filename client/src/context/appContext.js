@@ -4,7 +4,7 @@ import {
   DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN,
   REGISTER_USER_ERROR, REGISTER_USER_SUCCESS,
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS,
-  TOGGLE_SIDEBAR,  LOGOUT_USER,
+  TOGGLE_SIDEBAR,  LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS
 
 } from "./action";
 import axios from 'axios'
@@ -31,6 +31,26 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const authFetch = axios.create({
+    baseURL: '/api/v1',
+  });
+  // request
+
+  // response
+
+  authFetch.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      // console.log(error.response)
+      if (error.response.status === 401) {
+        logoutUser();
+      }
+      return Promise.reject(error);
+    }
+  );
 
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
@@ -102,8 +122,25 @@ const AppProvider = ({ children }) => {
   };
 
   const updateUser = async (currentUser) => {
-    console.log(currentUser)
-  }
+    dispatch({ type: UPDATE_USER_BEGIN });
+    try {
+      const { data } = await authFetch.patch('/auth/updateUser', currentUser);
+      const { user, location } = data;
+
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: { user, location },
+      });
+    } catch (error) {
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
+    }
+    clearAlert();
+  };
 
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
