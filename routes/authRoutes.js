@@ -11,4 +11,4 @@ router.route('/updateUser').patch(authenticateUser ,updateUser)
 
 
 
-export default router
+export default router 
