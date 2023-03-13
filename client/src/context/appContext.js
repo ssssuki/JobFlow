@@ -23,8 +23,16 @@ const initialState = {
   user: user ? JSON.parse(user) : null,
   userLocation: userLocation || '',
   token: token,
-  jobLocation: userLocation || '',
   showSidebar: false,
+  jobLocation: userLocation || '',
+  isEditing: false,
+  editJobId: '',
+  position: '',
+  company: '',
+  jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+  jobType: 'full-time',
+  statusOptions: ['interview', 'declined', 'pending'],
+  status: 'pending',
 };
 
 const AppContext = React.createContext();
