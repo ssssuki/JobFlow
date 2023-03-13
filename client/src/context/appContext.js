@@ -6,6 +6,7 @@ import {
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS,
   TOGGLE_SIDEBAR,  LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
   HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS, GET_JOBS_BEGIN,GET_JOBS_SUCCESS,
+  SET_EDIT_JOB,
 
 } from "./action";
 import axios from 'axios'
@@ -211,9 +212,21 @@ const getJobs = async () => {
     clearAlert()
   }
 
+  const setEditJob = (id) => {
+    dispatch({ type: SET_EDIT_JOB, payload: { id } });
+  };
+
+  const editJob = (id) =>{
+    console.log('edit')
+  }
+
+  const deleteJob=(id)=>{
+    console.log('delete')
+  }
+
   return (
     <AppContext.Provider value={{ ...state, displayAlert, registerUser, loginUser ,logoutUser, toggleSidebar, updateUser,
-    handleChange, clearValues, createJob, getJobs}}>
+    handleChange, clearValues, createJob, getJobs, setEditJob, deleteJob,editJob,}}>
       {children}
     </AppContext.Provider>
   );

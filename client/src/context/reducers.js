@@ -4,7 +4,7 @@ import {
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, TOGGLE_SIDEBAR, LOGOUT_USER,
   UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
   HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS,
-  GET_JOBS_BEGIN, GET_JOBS_SUCCESS
+  GET_JOBS_BEGIN, GET_JOBS_SUCCESS,SET_EDIT_JOB
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -163,6 +163,22 @@ const reducer = (state, action) => {
       numOfPages: action.payload.numOfPages,
     };
   }
+
+  if (action.type === SET_EDIT_JOB) {
+    const job = state.jobs.find((job) => job._id === action.payload.id);
+    const { _id, position, company, jobLocation, jobType, status } = job;
+    return {
+      ...state,
+      isEditing: true,
+      editJobId: _id,
+      position,
+      company,
+      jobLocation,
+      jobType,
+      status,
+    };
+  }
+  
   throw new Error(`no such action : ${action.type}`);
 };
 

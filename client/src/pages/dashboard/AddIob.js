@@ -15,6 +15,9 @@ const AddJob = () => {
     jobTypeOptions,
     status,
     statusOptions,
+    handleChange,
+    createJob,
+    editJob
   
   } = useAppContext()
 
@@ -25,8 +28,11 @@ const AddJob = () => {
       displayAlert()
       return
     }
-
-    console.log("createJob")
+    if(isEditing){
+      editJob()
+      return
+    }
+   createJob()
   }
   const handleJobInput = (e) => {
     const name = e.target.name
