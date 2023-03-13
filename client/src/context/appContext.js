@@ -1,10 +1,11 @@
-import React, { useReducer, useContext, useEffect } from "react";
+import React, { useReducer, useContext } from "react";
 import reducer from "./reducers";
 import {
   DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN,
   REGISTER_USER_ERROR, REGISTER_USER_SUCCESS,
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS,
-  TOGGLE_SIDEBAR,  LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS
+  TOGGLE_SIDEBAR,  LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
+  HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS, GET_JOBS_BEGIN,GET_JOBS_SUCCESS,
 
 } from "./action";
 import axios from 'axios'
@@ -33,6 +34,10 @@ const initialState = {
   jobType: 'full-time',
   statusOptions: ['interview', 'declined', 'pending'],
   status: 'pending',
+  jobs: [],
+  totalJobs: 0,
+  numOfPages: 1,
+  page: 1,
 };
 
 const AppContext = React.createContext();
@@ -153,8 +158,62 @@ const AppProvider = ({ children }) => {
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
   };
+
+  const handleChange = ({ name, value }) => {
+    dispatch({ type: HANDLE_CHANGE, payload: { name, value } });
+  };
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES });
+  };
+  const createJob = async () => {
+    dispatch({ type: CREATE_JOB_BEGIN });
+    try {
+      const { position, company, jobLocation, jobType, status } = state;
+      await authFetch.post('/jobs', {
+        position,
+        company,
+        jobLocation,
+        jobType,
+        status,
+      });
+      dispatch({ type: CREATE_JOB_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: CREATE_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
+
+const getJobs = async () => {
+  let url = `/jobs`
+
+  dispatch({type: GET_JOBS_BEGIN})
+  try{
+    const {data}=await authFetch(url)
+    const {jobs, totalJobs, numOfPages} = data
+    dispatch({
+      type: GET_JOBS_SUCCESS,
+      payload:{
+        jobs,
+        totalJobs,
+        numOfPages
+      }
+    })
+    }catch (error){
+      console.log(error.response)
+      logoutUser()
+    }
+    clearAlert()
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, registerUser, loginUser ,logoutUser, toggleSidebar, updateUser}}>
+    <AppContext.Provider value={{ ...state, displayAlert, registerUser, loginUser ,logoutUser, toggleSidebar, updateUser,
+    handleChange, clearValues, createJob, getJobs}}>
       {children}
     </AppContext.Provider>
   );
