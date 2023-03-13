@@ -6,7 +6,9 @@ import {
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS,
   TOGGLE_SIDEBAR,  LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
   HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS, GET_JOBS_BEGIN,GET_JOBS_SUCCESS,
-  SET_EDIT_JOB,
+  SET_EDIT_JOB,DELETE_JOB_BEGIN, DELETE_JOB_ERROR,
+  EDIT_JOB_BEGIN, EDIT_JOB_ERROR, EDIT_JOB_SUCCESS,
+
 
 } from "./action";
 import axios from 'axios'
@@ -216,13 +218,44 @@ const getJobs = async () => {
     dispatch({ type: SET_EDIT_JOB, payload: { id } });
   };
 
-  const editJob = (id) =>{
-    console.log('edit')
-  }
+  const editJob = async () => {
+    dispatch({ type: EDIT_JOB_BEGIN });
 
-  const deleteJob=(id)=>{
-    console.log('delete')
-  }
+    try {
+      const { position, company, jobLocation, jobType, status } = state;
+      await authFetch.patch(`/jobs/${state.editJobId}`, {
+        company,
+        position,
+        jobLocation,
+        jobType,
+        status,
+      });
+      dispatch({ type: EDIT_JOB_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
+  const deleteJob = async (jobId) => {
+    dispatch({ type: DELETE_JOB_BEGIN });
+    try {
+      await authFetch.delete(`/jobs/${jobId}`);
+      getJobs();
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: DELETE_JOB_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
 
   return (
     <AppContext.Provider value={{ ...state, displayAlert, registerUser, loginUser ,logoutUser, toggleSidebar, updateUser,

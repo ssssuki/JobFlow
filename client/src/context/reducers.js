@@ -4,7 +4,9 @@ import {
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, TOGGLE_SIDEBAR, LOGOUT_USER,
   UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
   HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS,
-  GET_JOBS_BEGIN, GET_JOBS_SUCCESS,SET_EDIT_JOB
+  GET_JOBS_BEGIN, GET_JOBS_SUCCESS,SET_EDIT_JOB, DELETE_JOB_BEGIN, DELETE_JOB_ERROR,
+  EDIT_JOB_BEGIN, EDIT_JOB_ERROR, EDIT_JOB_SUCCESS,
+
 } from "./action";
 
 import { initialState } from "./appContext";
@@ -178,7 +180,45 @@ const reducer = (state, action) => {
       status,
     };
   }
-  
+
+  if (action.type === DELETE_JOB_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === DELETE_JOB_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === EDIT_JOB_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }
+  if (action.type === EDIT_JOB_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'Job Updated!',
+    };
+  }
+  if (action.type === EDIT_JOB_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      alertText: action.payload.msg,
+    };
+  }
+
   throw new Error(`no such action : ${action.type}`);
 };
 
