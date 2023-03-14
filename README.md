@@ -1,6 +1,6 @@
 # JobFlow
 
-#### Track Your Job Search
+## Track Your Job Search
 
 Project in Action - [JobFlow](https://jobflow.onrender.com/)
 
