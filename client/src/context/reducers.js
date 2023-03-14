@@ -6,6 +6,7 @@ import {
   HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS,
   GET_JOBS_BEGIN, GET_JOBS_SUCCESS,SET_EDIT_JOB, DELETE_JOB_BEGIN, DELETE_JOB_ERROR,
   EDIT_JOB_BEGIN, EDIT_JOB_ERROR, EDIT_JOB_SUCCESS,
+  SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS,
 
 } from "./action";
 
@@ -218,6 +219,23 @@ const reducer = (state, action) => {
       alertText: action.payload.msg,
     };
   }
+
+  if (action.type === SHOW_STATS_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      showAlert: false,
+    };
+  }
+  if (action.type === SHOW_STATS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      stats: action.payload.stats,
+      monthlyApplications: action.payload.monthlyApplications,
+    };
+  }
+
 
   throw new Error(`no such action : ${action.type}`);
 };

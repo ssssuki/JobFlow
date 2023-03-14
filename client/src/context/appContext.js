@@ -4,10 +4,11 @@ import {
   DISPLAY_ALERT, CLEAR_ALERT, REGISTER_USER_BEGIN,
   REGISTER_USER_ERROR, REGISTER_USER_SUCCESS,
   LOGIN_USER_BEGIN, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS,
-  TOGGLE_SIDEBAR,  LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
-  HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN,CREATE_JOB_ERROR,CREATE_JOB_SUCCESS, GET_JOBS_BEGIN,GET_JOBS_SUCCESS,
-  SET_EDIT_JOB,DELETE_JOB_BEGIN, DELETE_JOB_ERROR,
+  TOGGLE_SIDEBAR, LOGOUT_USER, UPDATE_USER_BEGIN, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS,
+  HANDLE_CHANGE, CLEAR_VALUES, CREATE_JOB_BEGIN, CREATE_JOB_ERROR, CREATE_JOB_SUCCESS, GET_JOBS_BEGIN, GET_JOBS_SUCCESS,
+  SET_EDIT_JOB, DELETE_JOB_BEGIN, DELETE_JOB_ERROR,
   EDIT_JOB_BEGIN, EDIT_JOB_ERROR, EDIT_JOB_SUCCESS,
+  SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS,
 
 
 } from "./action";
@@ -41,6 +42,8 @@ const initialState = {
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
+  stats: {},
+  monthlyApplications: [],
 };
 
 const AppContext = React.createContext();
@@ -192,22 +195,22 @@ const AppProvider = ({ children }) => {
   };
 
 
-const getJobs = async () => {
-  let url = `/jobs`
+  const getJobs = async () => {
+    let url = `/jobs`
 
-  dispatch({type: GET_JOBS_BEGIN})
-  try{
-    const {data}=await authFetch(url)
-    const {jobs, totalJobs, numOfPages} = data
-    dispatch({
-      type: GET_JOBS_SUCCESS,
-      payload:{
-        jobs,
-        totalJobs,
-        numOfPages
-      }
-    })
-    }catch (error){
+    dispatch({ type: GET_JOBS_BEGIN })
+    try {
+      const { data } = await authFetch(url)
+      const { jobs, totalJobs, numOfPages } = data
+      dispatch({
+        type: GET_JOBS_SUCCESS,
+        payload: {
+          jobs,
+          totalJobs,
+          numOfPages
+        }
+      })
+    } catch (error) {
       console.log(error.response)
       logoutUser()
     }
@@ -257,13 +260,35 @@ const getJobs = async () => {
     clearAlert();
   };
 
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_BEGIN });
+    try {
+      const { data } = await authFetch('/jobs/stats');
+      dispatch({
+        type: SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyApplications: data.monthlyApplications,
+        },
+      });
+    } catch (error) {
+      logoutUser();
+    }
+    clearAlert();
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, registerUser, loginUser ,logoutUser, toggleSidebar, updateUser,
-    handleChange, clearValues, createJob, getJobs, setEditJob, deleteJob,editJob,}}>
+    <AppContext.Provider value={{
+      ...state, displayAlert, registerUser, loginUser, logoutUser, toggleSidebar, updateUser,
+      handleChange, clearValues, createJob, getJobs, setEditJob, deleteJob, editJob,showStats,
+      
+    }}>
       {children}
     </AppContext.Provider>
   );
 };
+
+
 
 const useAppContext = () => {
   return useContext(AppContext);
