@@ -1,6 +1,6 @@
 import { useAppContext } from '../context/appContext'
 import NavLinks from './NavLinks'
-import Logo from '../components/Logo'
+import logo from '../assets/images/logo.svg'
 import Wrapper from '../assets/wrappers/BigSidebar'
 
 const BigSidebar = () => {
@@ -14,7 +14,7 @@ const BigSidebar = () => {
       >
         <div className='content'>
           <header>
-            <Logo />
+          <img src={logo} height='30' alt="JobFlow" className="logo" />
           </header>
           <NavLinks />
         </div>

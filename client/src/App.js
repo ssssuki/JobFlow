@@ -3,7 +3,6 @@ import { Landing, Error, Register, ProtectedRoute } from "./pages";
 import { AllJobs, Profile, SharedLayout, Stats, AddJob } from './pages/dashboard'
 
 function App() {
-  console.log("test")
   return (
     <BrowserRouter>
       <Routes>

@@ -13,6 +13,7 @@ const start = async () => {
     const jsonProducts = JSON.parse(   
       await readFile(new URL('./MOCKDATA.json', import.meta.url))
     );
+    console.log(jsonProducts)
     await Job.create(jsonProducts);
     console.log('Success!!!');
     process.exit(0);
