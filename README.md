@@ -4,7 +4,7 @@
 
 Project in Action - [JobFlow](https://jobflow.onrender.com/)
 
-JobFlow is a useful job application app that empowers job seekers to take control of their job search. With JobFlow, you can track your job search progress, it enables users to create a comprehensive record of job applications and other important details related to the job search process. JobFlow simplifies and streamlines the job search process, helping you stay organized and motivated. Say goodbye to job search overwhelm and hello to landing your dream job.
+JobFlow is a **_useful job application app_** that empowers job seekers to take control of their job search. With JobFlow, you can track your job search progress, it enables users to create a comprehensive record of job applications and other important details related to the job search process. JobFlow simplifies and streamlines the job search process, helping you stay organized and motivated. Say goodbye to job search overwhelm and hello to landing your dream job.
 
 
 
